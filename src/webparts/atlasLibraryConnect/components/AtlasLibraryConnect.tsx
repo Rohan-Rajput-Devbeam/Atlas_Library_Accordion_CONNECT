@@ -198,6 +198,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     console.log(this.props.people);
    
     //this.getUserGroups2();
+    let a = "0";
 
     
 
@@ -210,7 +211,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
       <div className={styles.atlasLibraryConnect}>
 
         <div id="accordionExample">
-          {this.state.categories.map((categoryDetail, i) => (
+          {this.state.categories.map((categoryDetail: string, i: any) => (
             <Card>
 
 
@@ -225,7 +226,8 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
                 </Collapse.Button>
               </Card.Header>
-              <Collapse id={`collapse${i}`} aria-labelledby={`heading${i}`} data-parent="#accordionExample">
+
+              <Collapse id={`collapse${i}`} className={a=i ?"hide":"show"} aria-labelledby={`heading${i}`}       data-parent="#accordionExample">
                 <Card.Body>
                   <div className="table-responsive">
                     <table className="table">
