@@ -227,7 +227,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
                 </Collapse.Button>
               </Card.Header>
 
-              <Collapse id={`collapse${i}`} className={a=i ?"hide":"show"} aria-labelledby={`heading${i}`}       data-parent="#accordionExample">
+              <Collapse id={`collapse${i}`} aria-labelledby={`heading${i}`}  className={a=i ?"hide":"show"}     data-parent="#accordionExample">
                 <Card.Body>
                   <div className="table-responsive">
                     <table className="table">
