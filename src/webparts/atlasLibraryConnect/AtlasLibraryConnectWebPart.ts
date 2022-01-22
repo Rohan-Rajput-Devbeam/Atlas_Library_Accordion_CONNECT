@@ -24,18 +24,21 @@ export interface IAtlasLibraryConnectWebPartProps {
   people: any;
   description: string;
   authuser:boolean;
+  color:any;
 }
 
 export default class AtlasLibraryConnectWebPart extends BaseClientSideWebPart<IAtlasLibraryConnectWebPartProps> {
 
   public render(): void {
+    
     console.log(this.properties.people);
     const element: React.ReactElement<IAtlasLibraryConnectProps> = React.createElement(
       AtlasLibraryConnect,
       {
         description: this.properties.description,
         context: this.context,
-        people:this.properties.people
+        people:this.properties.people,
+
       }
     );
 
