@@ -1,4 +1,13 @@
 import * as React from 'react';
+// import { IMyModalPopupProps } from './IMyModalPopupProps';
+// interface IPopupState {
+//   callchildcomponent:boolean;
+// }
+import { DefaultButton } from '@fluentui/react/lib/Button';
+import { MYModal } from './MYMODAL';
+
+
+
 import styles from './AtlasLibraryConnect.module.scss';
 //import { IAtlasLibraryConnectProps } from './IAtlasLibraryConnectProps';
 
@@ -7,20 +16,37 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { Collapse, Card } from 'bootstrap-4-react';
 import { SPService } from '../Services/SPServices';
 import FileIconContext from './FileIconContext';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 //import "bootstrap/dist/css/bootstrap.min.css";
 
 import { SPHttpClient, SPHttpClientResponse, SPHttpClientConfiguration } from '@microsoft/sp-http';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ThemeSettingName } from 'office-ui-fabric-react';
 
+import {
+  ColorPicker,
+  IChoiceGroupOption,
+  IColor,
+  IColorPickerStyles,
+  SwatchColorPicker,
+  Label,
+} from 'office-ui-fabric-react/lib/index';
 
+
+
+var colorArray = [];
 export interface IAtlasLibraryConnectState {
   docItems: any;
   categories: any;
   currPageUrl: any;
   currUserGroups: any;
   displayFlag: boolean;
+  callchildcomponent: boolean;
+  swatchcolor: any;
+  previewColor: any;
+  color: any;
+
+
 }
 
 
@@ -30,6 +56,7 @@ export interface IAtlasLibraryConnectProps {
   description: string;
   context: WebPartContext;
   people: any;
+
 }
 
 
@@ -64,13 +91,36 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
       categories: [],
       currPageUrl: window.location.href,
       currUserGroups: [],
-      displayFlag: false
+      displayFlag: false,
+      callchildcomponent: false,
+      swatchcolor: [],
+      previewColor: "",
+      color: "",
+
 
     }
+    this.handler = this.handler.bind(this);
+    this.Buttonclick = this.Buttonclick.bind(this);
+
+
     console.log(this.state.currPageUrl)
     this.selectIcon = this.selectIcon.bind(this);
 
     //this.props.people
+  }
+
+
+  handler() {
+    this.setState({
+      callchildcomponent: false
+    })
+  }
+  private Buttonclick(e) {
+    e.preventDefault();
+
+    this.setState({ callchildcomponent: true });
+
+
   }
 
   componentDidUpdate() {
@@ -87,7 +137,9 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
     console.log(this.rackName);
 
-    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
+
     console.log(this.hrefString);
     this.getUserGroups2();
     this.getAllDocs2();
@@ -112,7 +164,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
   }
 
   public async getUserGroups2() {
-    
+
     let usrGroups = await this.SPService.getUserGroups();
     console.log(usrGroups);
     this.setState({
@@ -190,17 +242,20 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
   }
 
- 
 
 
-  
+
+
+
   public render(): React.ReactElement<IAtlasLibraryConnectProps> {
     console.log(this.props.people);
-   
+    console.log(this.state.swatchcolor);
+
+
     //this.getUserGroups2();
     let a = "0";
 
-    
+
 
 
 
@@ -209,12 +264,9 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     return (
 
       <div className={styles.atlasLibraryConnect}>
-
         <div id="accordionExample">
           {this.state.categories.map((categoryDetail: string, i: any) => (
             <Card>
-
-
               <Card.Header mb="0" className={styles.CardHeader} >
                 {/* <label htmlFor={`cb${i}`}>Click here to toggle checkbox</label>
                    <input type="checkbox" id={`cb${i}`} />  */}
@@ -227,7 +279,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
                 </Collapse.Button>
               </Card.Header>
 
-              <Collapse id={`collapse${i}`} aria-labelledby={`heading${i}`}  className={a=i ?"hide":"show"}     data-parent="#accordionExample">
+              <Collapse id={`collapse${i}`} aria-labelledby={`heading${i}`} className={a = i ? "hide" : "show"} data-parent="#accordionExample">
                 <Card.Body>
                   <div className="table-responsive">
                     <table className="table">
@@ -307,6 +359,45 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
 
                 </Card.Body>
+                {this.state.displayFlag == true ?
+                  <a title="Color Picker" className={styles.colorPickerIcon} onClick={(e) => this.Buttonclick(e)}><img src="https://devbeam.sharepoint.com/sites/ModernConnect/SiteAssets/Logo/Icons/color-picker.png"></img>
+                    {/* <DefaultButton onClick={(e) =>this.Buttonclick(e) } text="Color Picker Modal" /> */}
+                    {this.state.callchildcomponent && <MYModal myprops={this.state} handler={this.handler} />}
+                  </a> : <br></br>}
+                {/* <div>
+                  <h1>Swatch Color Picker with Dynamic Colors on Selection from Color Picker</h1>
+                  <ColorPicker
+                    color={this.state.color}
+                    onChange={this._updateColor}
+                    styles={colorPickerStyles}
+                  />
+                  <SwatchColorPicker
+                    selectedId={this.state.previewColor}
+                    onCellHovered={(id, color) => this.setState({ previewColor: color! })}
+                    onColorChanged={(id, color) => this.setState({ previewColor: color! })}
+                    columnCount={9}
+                    cellShape={'circle'}
+                    cellHeight={50}
+                    cellWidth={50}
+                    cellBorderWidth={3}
+                    colorCells={
+                      this.state.swatchcolor
+                    }
+                  />
+                  <Label style={{
+                    color: this.state.previewColor ? this.state.previewColor : "#000",
+                    fontSize: '24px'
+                  }}>Colorful Text on Hover and Change</Label>
+                  <DefaultButton
+                    text="Colorful Button"
+                    style={{
+                      backgroundColor: this.state.previewColor ? this.state.previewColor : "#fff",
+                      fontSize: '24px',
+                      border: '1px solid black'
+                    }}
+                  />
+                </div> */}
+
               </Collapse>
             </Card>
           ))}
@@ -316,20 +407,43 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
           <br></br>
           <br></br>
 
-{this.state.displayFlag == true ? 
-    <div>
-    {/* <a href="https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse Documents/Rack1641902403679">GoTo Rackhouse Folder</a> */}
-    {/* <a target='_blank' href={`https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`}  rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a> */}
-    <a href={this.hrefString} target='_blank' rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a>
+          {this.state.displayFlag == true ?
+            <div>
+              {/* <a href="https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse Documents/Rack1641902403679">GoTo Rackhouse Folder</a> */}
+              {/* <a target='_blank' href={`https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`}  rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a> */}
+              <a href={this.hrefString} target='_blank' rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a>
 
-  </div>
-:<br></br>}
-        
+            </div>
+            : <br></br>}
+
           {/* <div>{this.properties.people}</div> */}
         </div>
       </div>
 
     );
   }
- 
+
+  private _updateColor = async (ev: React.SyntheticEvent<HTMLElement>, colorObj: IColor) => {
+    colorArray.shift();
+    // colorArray.push({ ID: '#' + colorObj.hex, label: '#' + colorObj.hex, color: '#' + colorObj.hex });
+    colorArray.push({ color: '#' + colorObj.hex });
+    await this.setState({ swatchcolor: colorArray });
+    console.log(colorArray);
+    console.log(this.state.swatchcolor);
+
+
+  }
+
 }
+
+
+const colorPickerStyles: Partial<IColorPickerStyles> = {
+  panel: { padding: 12 },
+  root: {
+    maxWidth: 352,
+    minWidth: 352,
+  },
+};
+
+
+
