@@ -20,6 +20,7 @@
     "autobind-decorator": "^2.4.0",
     "bootstrap": "^4.6.0",
     "bootstrap-4-react": "0.0.59",
+    "file-saver": "^2.0.5",
     "office-ui-fabric-react": "7.174.1",
     "react": "16.13.1",
     "react-bootstrap": "^2.1.0",

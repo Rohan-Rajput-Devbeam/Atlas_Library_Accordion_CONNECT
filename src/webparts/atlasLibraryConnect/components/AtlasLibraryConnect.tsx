@@ -32,7 +32,7 @@ import {
   Label,
 } from 'office-ui-fabric-react/lib/index';
 
-
+import { saveAs } from "file-saver";
 
 var colorArray = [];
 export interface IAtlasLibraryConnectState {
@@ -137,8 +137,8 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
     console.log(this.rackName);
 
-    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
-    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
+    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
 
     console.log(this.hrefString);
     this.getUserGroups2();
@@ -242,11 +242,6 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
   }
 
-
-
-
-
-
   public render(): React.ReactElement<IAtlasLibraryConnectProps> {
     console.log(this.props.people);
     console.log(this.state.swatchcolor);
@@ -254,10 +249,6 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
     //this.getUserGroups2();
     let a = "0";
-
-
-
-
 
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
