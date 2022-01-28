@@ -21,6 +21,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-4-react": "0.0.59",
     "file-saver": "^2.0.5",
+    "javascript-color-gradient": "^1.3.2",
     "office-ui-fabric-react": "7.174.1",
     "react": "16.13.1",
     "react-bootstrap": "^2.1.0",

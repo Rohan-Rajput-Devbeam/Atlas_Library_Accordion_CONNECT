@@ -4,4 +4,6 @@ export interface IAtlasLibraryConnectProps {
   description: string;
   context: WebPartContext;
   people: any;
+  
+
 }

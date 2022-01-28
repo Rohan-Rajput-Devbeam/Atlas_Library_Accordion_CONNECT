@@ -34,6 +34,8 @@ import {
 
 import { saveAs } from "file-saver";
 
+import Gradient from "javascript-color-gradient";
+
 var colorArray = [];
 export interface IAtlasLibraryConnectState {
   docItems: any;
@@ -56,6 +58,9 @@ export interface IAtlasLibraryConnectProps {
   description: string;
   context: WebPartContext;
   people: any;
+  gradientColor1:any;
+  gradientColor2:any;
+
 
 }
 
@@ -137,8 +142,8 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
     console.log(this.rackName);
 
-    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
-    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
+    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
 
     console.log(this.hrefString);
     this.getUserGroups2();
@@ -246,6 +251,13 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     console.log(this.props.people);
     console.log(this.state.swatchcolor);
 
+    const colorGradient = new Gradient();
+    const color1 = `${this.props.gradientColor1}`;
+    const color2 = `${this.props.gradientColor2}`;
+    colorGradient.setGradient(color1, color2);
+    colorGradient.setMidpoint(this.state.categories.length);
+    // console.log(color1);
+    // console.log(color2);
 
     //this.getUserGroups2();
     let a = "0";
@@ -258,7 +270,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
         <div id="accordionExample">
           {this.state.categories.map((categoryDetail: string, i: any) => (
             <Card>
-              <Card.Header mb="0" className={styles.CardHeader} >
+              <Card.Header mb="0"  style={{backgroundColor:  `${colorGradient.getColor(i+1)}`}} className={styles.CardHeader} >
                 {/* <label htmlFor={`cb${i}`}>Click here to toggle checkbox</label>
                    <input type="checkbox" id={`cb${i}`} />  */}
                 <Collapse.Button className={styles.CollapseButton}

@@ -119,9 +119,9 @@ export class SPService {
 
 
         try {
-            let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/${this.rackName}')/files?$expand=ListItemAllFields`
+            // let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/${this.rackName}')/files?$expand=ListItemAllFields`
 
-            // let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/Rack1642423725557')/files?$expand=ListItemAllFields`
+            let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/Rack1642423725557')/files?$expand=ListItemAllFields`
 
             let myItems = await (await this.context.spHttpClient.get(requestUrl, SPHttpClient.configurations.v1)).json();
             console.log(myItems.value);
