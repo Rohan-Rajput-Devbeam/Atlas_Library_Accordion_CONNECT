@@ -9,15 +9,46 @@
   width: 100%;
 }
 
+
 .atlasLibraryConnect {
   font-family: "Oswald" !important;
   margin: 5%;
+
+  .addDocuments {
+    box-sizing: unset;
+
+    .docCard {
+      border: none;
+
+      .docCardHeader {
+        width: 19em;
+        border-bottom: 0;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    .modalXl {
+      width: 95%;
+      height: 100%;
+      max-width: 1425px;
+    }
+    // .managedocCardHeader {
+    //   width: 19em;
+    //   border-bottom: 0;
+    //   border: 1px solid rgba(0, 0, 0, 0.125);
+    //   float: right;
+    //   top: -63px;
+    // }
+  }
+  // managedocCardHeader
 
   .CardHeader {
     //background-color: #17a2b8;
     // background-color: #c5c5c5;
     // background: linear-gradient(0deg, #c5c5c5 0, #8a8a8a 80%, #8a8a8a 70%);
-          //  background: linear-gradient(0deg, #17a2b8, #00c5d9 20%, #00c5d9 0);
+        background: linear-gradient(0deg, #17a2b8, #00c5d9 20%, #00c5d9 0);
     //background-color: #00c5d9;
     color: #fff;
     height: 63px;
@@ -349,4 +380,9 @@
     background-color: #17a2b8 !important;
     border-color: #17a2b8 !important;
   }
+
+
+   
+  
 }
+

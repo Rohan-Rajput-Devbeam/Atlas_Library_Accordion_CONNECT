@@ -1,25 +1,17 @@
 import * as React from 'react';
-// import { IMyModalPopupProps } from './IMyModalPopupProps';
-// interface IPopupState {
-//   callchildcomponent:boolean;
-// }
+
 import { DefaultButton } from '@fluentui/react/lib/Button';
 import { MYModal } from './MYMODAL';
-
-
+import ManageDocModal from './ManageDocModal';
 
 import styles from './AtlasLibraryConnect.module.scss';
-//import { IAtlasLibraryConnectProps } from './IAtlasLibraryConnectProps';
+
 
 import { escape } from '@microsoft/sp-lodash-subset';
 
 import { Collapse, Card } from 'bootstrap-4-react';
 import { SPService } from '../Services/SPServices';
 import FileIconContext from './FileIconContext';
-import { Button, Modal } from 'react-bootstrap';
-//import "bootstrap/dist/css/bootstrap.min.css";
-
-import { SPHttpClient, SPHttpClientResponse, SPHttpClientConfiguration } from '@microsoft/sp-http';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ThemeSettingName } from 'office-ui-fabric-react';
 
@@ -32,9 +24,11 @@ import {
   Label,
 } from 'office-ui-fabric-react/lib/index';
 
-import { saveAs } from "file-saver";
-
 import Gradient from "javascript-color-gradient";
+
+
+
+
 
 var colorArray = [];
 export interface IAtlasLibraryConnectState {
@@ -49,6 +43,7 @@ export interface IAtlasLibraryConnectState {
   color: any;
 
 
+
 }
 
 
@@ -58,8 +53,8 @@ export interface IAtlasLibraryConnectProps {
   description: string;
   context: WebPartContext;
   people: any;
-  gradientColor1:any;
-  gradientColor2:any;
+  gradientColor1: any;
+  gradientColor2: any;
 
 
 }
@@ -142,8 +137,8 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
     console.log(this.rackName);
 
-    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
-    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1642423725557`;
+    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1646754094655`;
 
     console.log(this.hrefString);
     this.getUserGroups2();
@@ -248,6 +243,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
   }
 
   public render(): React.ReactElement<IAtlasLibraryConnectProps> {
+
     console.log(this.props.people);
     console.log(this.state.swatchcolor);
 
@@ -270,7 +266,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
         <div id="accordionExample">
           {this.state.categories.map((categoryDetail: string, i: any) => (
             <Card>
-              <Card.Header mb="0"  style={{backgroundColor:  `${colorGradient.getColor(i+1)}`}} className={styles.CardHeader} >
+              <Card.Header mb="0" /*style={{ backgroundColor: `${colorGradient.getColor(i + 1)}` }}*/ className={styles.CardHeader} >
                 {/* <label htmlFor={`cb${i}`}>Click here to toggle checkbox</label>
                    <input type="checkbox" id={`cb${i}`} />  */}
                 <Collapse.Button className={styles.CollapseButton}
@@ -304,7 +300,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
                             <tr>
                               <td>
-                                <a href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri != null && itemDetail.ListItemAllFields.ServerRedirectedEmbedUri != "" ? itemDetail.ListItemAllFields.ServerRedirectedEmbedUri : itemDetail.ServerRelativeUrl}>
+                                <a target="_blank" data-interception="off" rel="noopener noreferrer" href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri != null && itemDetail.ListItemAllFields.ServerRedirectedEmbedUri != "" ? itemDetail.ListItemAllFields.ServerRedirectedEmbedUri : itemDetail.ServerRelativeUrl}>
                                   <img src={this.selectIcon(itemDetail.Name)} width='30px' />
 
                                   <span className={styles.titleSpan} > {itemDetail.Name} </span>
@@ -314,7 +310,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
                                 {/* console.log(today.toLocaleDateString("en-US", options)); */}
 
                               </td>
-                              <td><a href={itemDetail.ServerRelativeUrl} download> <svg xmlns="https://devbeam.sharepoint.com/:u:/s/ModernConnect/EVyda3UoA1dOpn3igwkln58BbkcQqozoGeWFhR8jLBVZhg?e=TatJ1o" width="16" height="16" fill="#CC0A0A" className="bi bi-download" viewBox="0 0 16 16">
+                              <td><a data-interception="off" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=https://devbeam.sharepoint.com" + itemDetail.ServerRelativeUrl} > <svg xmlns="https://devbeam.sharepoint.com/:u:/s/ModernConnect/EVyda3UoA1dOpn3igwkln58BbkcQqozoGeWFhR8jLBVZhg?e=TatJ1o" width="16" height="16" fill="#CC0A0A" className="bi bi-download" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
                               </svg></a></td>
@@ -412,9 +408,8 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
           {this.state.displayFlag == true ?
             <div>
-              {/* <a href="https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse Documents/Rack1641902403679">GoTo Rackhouse Folder</a> */}
-              {/* <a target='_blank' href={`https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`}  rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a> */}
-              <a href={this.hrefString} target='_blank' rel="noopener noreferrer" id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a>
+              <ManageDocModal rackUrl={this.hrefString} />
+              {/* <a target="_blank" data-interception="off" rel="noopener noreferrer" href={this.hrefString} id="rackButton" className={`btn btn-info ${styles.submitBtn}`} role="button">Go to Rackhouse content</a> */}
 
             </div>
             : <br></br>}
