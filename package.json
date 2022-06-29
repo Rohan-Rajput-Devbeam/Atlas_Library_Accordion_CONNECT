@@ -16,6 +16,7 @@
     "@microsoft/sp-property-pane": "1.13.1",
     "@microsoft/sp-webpart-base": "1.13.1",
     "@pnp/sp": "^2.11.0",
+    "@pnp/spfx-controls-react": "^3.5.0",
     "@pnp/spfx-property-controls": "3.3.0",
     "autobind-decorator": "^2.4.0",
     "bootstrap": "^4.6.0",
@@ -26,7 +27,7 @@
     "react": "16.13.1",
     "react-bootstrap": "^1.6.4",
     "react-dom": "16.13.1",
-    "@pnp/spfx-controls-react": "^3.5.0",
+    "react-icons": "^4.3.1",
     "react-infinite-scroll-component": "^6.1.0",
     "sweetalert2": "^11.3.6"
   },

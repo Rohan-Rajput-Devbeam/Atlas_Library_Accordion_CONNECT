@@ -14,6 +14,8 @@ import { SPService } from '../Services/SPServices';
 import FileIconContext from './FileIconContext';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { ThemeSettingName } from 'office-ui-fabric-react';
+import { IoMdDownload, IoIosMail, IoIosStarOutline, IoIosArrowForward } from "react-icons/io";
+
 
 import {
   ColorPicker,
@@ -25,7 +27,14 @@ import {
 } from 'office-ui-fabric-react/lib/index';
 
 import Gradient from "javascript-color-gradient";
+import { sp, ClientsidePageFromFile, Web } from "@pnp/sp/presets/all";
 
+
+import {
+  SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions
+} from '@microsoft/sp-http';
+import "@pnp/sp/webs";
+import "@pnp/sp/folders";
 
 
 
@@ -103,7 +112,7 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     this.Buttonclick = this.Buttonclick.bind(this);
 
 
-    console.log(this.state.currPageUrl)
+    // console.log(this.state.currPageUrl)
     this.selectIcon = this.selectIcon.bind(this);
 
     //this.props.people
@@ -134,13 +143,15 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     const myArray = this.state.currPageUrl.split("/");
     let rackName = myArray[myArray.length - 1].split(".")[0];
     this.rackName = myArray[myArray.length - 1].split(".")[0];
+    // this.rackName = "Rack1649273338733"
 
-    console.log(this.rackName);
+    // console.log(this.rackName);
 
-    this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
-    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/Rack1646754094655`;
+    // this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/${this.rackName}`;
+    // this.hrefString = `https://bgsw1.sharepoint.com/sites/CONNECTII/Rackhouse%20Documents/Rack1646754094655`;
+    this.hrefString = `https://bgsw1.sharepoint.com/sites/CONNECTII/Rackhouse%20Documents/${this.rackName}`;
 
-    console.log(this.hrefString);
+    // console.log(this.hrefString);
     this.getUserGroups2();
     this.getAllDocs2();
 
@@ -148,13 +159,13 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
   public async getAllDocs2() {
     let allDocs = await this.SPService.getAllDocs();
-    console.log(allDocs);
+    // console.log(allDocs);
 
     this.setState({
       docItems: allDocs,
 
     });
-    console.log(this.state.docItems);
+    // console.log(this.state.docItems);
     this.categorize();
 
     // console.log(this.state.allItems);
@@ -166,12 +177,12 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
   public async getUserGroups2() {
 
     let usrGroups = await this.SPService.getUserGroups();
-    console.log(usrGroups);
+    // console.log(usrGroups);
     this.setState({
       currUserGroups: usrGroups,
 
     });
-    console.log(this.state.currUserGroups);
+    // console.log(this.state.currUserGroups);
 
     this.categorizeGroups();
   }
@@ -210,30 +221,44 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
     }));
     // let xyz = [... new Set(listItemsMapping)]
     let categories = [...new Set(listItemsMapping.map(item => item.category))];
-    console.log(listItemsMapping)
-    console.log(categories)
+    // console.log(listItemsMapping)
+    // console.log(categories)
     this.setState({
       ...this.state,
       categories: categories.sort()
     });
-    console.log(this.state.categories.length);
+    // console.log(this.state.categories.length);
 
   }
 
-  public categorizeGroups() {
+  public async categorizeGroups() {
     this.setState({
       displayFlag: false
     })
     let response = this.state.currUserGroups;
     var finalArray = response.value.map(function (obj: { Title: any; }) {
       return obj.Title;
+    });  //get user groups...
+    // const GroupArray = this.props.people.map((obj: { fullName: any; }) => {
+    //   return obj.fullName;
+    // });
+    const GroupArray = this.props.people.map((obj: { email: any; }) => {
+      return obj.email;
     });
-    console.log(finalArray);
-    console.log(this.props.people);
+
+    // var usrFullname = this.context.pageContext.user.displayName;
+    // var usrFullname = "Rohan Rajput";
+    let usrFullname = await (await sp.web.currentUser()).Email;
+    // console.log(usrFullname)
+
+    var Groupintersections = finalArray.filter(e => GroupArray.indexOf(e) !== -1);
+
+    // console.log(finalArray);
+    // console.log(this.props.people);
     for (let i = 0; i < this.props.people.length; i++) {
-      console.log(this.props.people[i].fullName);
-      if (finalArray.includes(this.props.people[i].fullName)) {
-        console.log("User Can view this shit...!!");
+      // console.log(this.props.people[i].fullName);
+      if (finalArray.includes(this.props.people[i].fullName) || GroupArray.includes(usrFullname) || Groupintersections.length > 0) {
+        // console.log("User Can view this section...!!");
         this.setState({
           displayFlag: true
         })
@@ -244,8 +269,15 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
   public render(): React.ReactElement<IAtlasLibraryConnectProps> {
 
-    console.log(this.props.people);
-    console.log(this.state.swatchcolor);
+    // var siteUrl = this.context.pageContext.web.absoluteUrl ///Get Site Url
+    // console.log(siteUrl)
+
+    // const myArray = siteUrl.split("/");
+    // let siteName = myArray[myArray.length - 1].split(".")[0]; ///Get Site Name
+    // console.log(siteName)
+
+    // console.log(this.props.people);
+    // console.log(this.state.swatchcolor);
 
     const colorGradient = new Gradient();
     const color1 = `${this.props.gradientColor1}`;
@@ -310,38 +342,26 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
                                 {/* console.log(today.toLocaleDateString("en-US", options)); */}
 
                               </td>
-                              <td><a data-interception="off" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=https://devbeam.sharepoint.com" + itemDetail.ServerRelativeUrl} > <svg xmlns="https://devbeam.sharepoint.com/:u:/s/ModernConnect/EVyda3UoA1dOpn3igwkln58BbkcQqozoGeWFhR8jLBVZhg?e=TatJ1o" width="16" height="16" fill="#CC0A0A" className="bi bi-download" viewBox="0 0 16 16">
+                              <td><a style={{ marginLeft: "-28px" }} data-interception="off" href={`https://bgsw1.sharepoint.com/sites/CONNECTII/_layouts/download.aspx?SourceUrl=https://bgsw1.sharepoint.com` + itemDetail.ServerRelativeUrl} >
+                                <IoMdDownload size={20} className={styles.downloadBut1} />
+                                {/*<svg xmlns="https://bgsw1.sharepoint.com/:u:/s/CONNECTII/EVyda3UoA1dOpn3igwkln58BbkcQqozoGeWFhR8jLBVZhg?e=TatJ1o" width="16" height="16" fill="#CC0A0A" className="bi bi-download" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                              </svg></a></td>
+                              </svg>*/}</a></td>
                               <td>
-                                <img src="https://devbeam.sharepoint.com/sites/ModernConnect/SiteAssets/Logo/Icons/stars-hollow-png.png"></img>
+                                <a style={{ marginLeft: "-30px" }} href=''>
+                                  <IoIosStarOutline size={20} className={styles.downloadBut1} />
+                                </a>
+                                {/* <img src="https://devbeam.sharepoint.com/sites/ModernConnect/SiteAssets/Logo/Icons/stars-hollow-png.png"></img> */}
 
                                 {/* <h1 className={styles.live}></h1> */}
 
                               </td>
                               <td>
-                                <a className="share-link hidden-xs hidden-sm"
-                                  href={`mailto:?subject=${itemDetail.Name}&ampbody=Open:%0D%0Ahttps://devbeam.sharepoint.com/sites/ModernConnect/Rackhouse%20Documents/1.%2520CONNECT%2520Tutorial%2520(5.3.2021).mp4"><i className="fa icon-envelope`}><i className="fa icon-envelope" aria-hidden="true"></i>
+                                <a style={{ marginLeft: "-36px" }} className="share-link hidden-xs hidden-sm"
+                                  href={`mailto:?subject=${itemDetail.Name}&ampbody=Open:%0D%0Ahttps://https://bgsw1.sharepoint.com/sites/CONNECTII/Rackhouse%20Documents/1.%2520CONNECT%2520Tutorial%2520(5.3.2021).mp4"><i className="fa icon-envelope`}>
 
-                                  <div className={styles['letter-image']}>
-
-                                    <div className={styles['animated-mail']}>
-                                      <div className={styles['back-fold']}></div>
-                                      <div className={styles.letter}>
-                                        <div className={styles['letter-border']}></div>
-                                        <div className={styles['letter-title']}></div>
-                                        <div className={styles['letter-context']}></div>
-                                        <div className={styles['letter-stamp']}>
-                                          <div className={styles['letter-stamp-inner']}></div>
-                                        </div>
-                                      </div>
-                                      <div className={styles['top-fold']}></div>
-                                      <div className={styles.body}></div>
-                                      <div className={styles['left-fold']}></div>
-                                    </div>
-                                    {/* {<div className={styles.shadow}></div>} */}
-                                  </div>
+                                  <IoIosMail size={20} className={styles.downloadBut1} />
                                 </a>
                               </td>
                             </tr> :
@@ -358,11 +378,16 @@ export default class AtlasLibraryConnect extends React.Component<IAtlasLibraryCo
 
 
                 </Card.Body>
-                {this.state.displayFlag == true ?
-                  <a title="Color Picker" className={styles.colorPickerIcon} onClick={(e) => this.Buttonclick(e)}><img src="https://devbeam.sharepoint.com/sites/ModernConnect/SiteAssets/Logo/Icons/color-picker.png"></img>
-                    {/* <DefaultButton onClick={(e) =>this.Buttonclick(e) } text="Color Picker Modal" /> */}
-                    {this.state.callchildcomponent && <MYModal myprops={this.state} handler={this.handler} />}
-                  </a> : <br></br>}
+                {
+                // this.state.displayFlag == true ?
+                //   <a title="Color Picker" className={styles.colorPickerIcon} onClick={(e) => this.Buttonclick(e)}><img src="https://bgsw1.sharepoint.com/sites/CONNECTII/SiteAssets/Logo/Icons/color-picker.png"></img>
+                //     {/* <DefaultButton onClick={(e) =>this.Buttonclick(e) } text="Color Picker Modal" /> */}
+                //     {this.state.callchildcomponent && <MYModal myprops={this.state} handler={this.handler} />}
+                //   </a> : 
+                //   <br></br>
+                  }
+
+
                 {/* <div>
                   <h1>Swatch Color Picker with Dynamic Colors on Selection from Color Picker</h1>
                   <ColorPicker

@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "accordion-client-side-solution",
+    "name": "Atlas_Library_Accordion_Connect-client-side-solution",
     "id": "131eedd1-5a90-4a76-bff0-58a947087330",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
@@ -16,6 +16,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/accordion.sppkg"
+    "zippedPackage": "solution/Atlas_Library_Accordion_Connect.sppkg"
   }
 }

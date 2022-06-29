@@ -9,26 +9,6 @@ import "@pnp/sp/folders";
 
 
 
-//const docList = sp.web.lists.getByTitle('Rackhouse Documents');
-const progList = sp.web.lists.getByTitle('Programs');
-
-// const docList = sp.web.getFolderByServerRelativePath("Rackhouse Documents/Rack1641385289004").listItemAllFields();
-
-// const docList = async () => {
-// const files = await sp.web.getFolderByServerRelativePath("Rackhouse Documents/Rack1641385289004").files();
-// };
-
-// const docList = async () => {
-// let items = await sp.web.rootFolder.folders.getByName("Rackhouse Documents").folders.getByName("Rack1641385289004").getItem();
-// console.log(items);
-// };
-
-// const docList = sp.web.rootFolder.folders.getByName("Rackhouse Documents").folders.getByName("Rack1641385289004");
-// //const docList =  folder.getItem();
-// //console.log(docList);
-
-
-
 export class SPService {
     state = {
 
@@ -43,20 +23,7 @@ export class SPService {
     people: [];
     authuser: boolean;
 
-    public callSomething(items: any[]) {
-        console.log(items);
-        this.abc = items;
-        console.log(this.abc);
-        this.state = {
-            allItems: items,
-            currPageUrl: window.location.href,
-            currUserGroups: []
-
-        }
-
-        console.log(this.state.allItems);
-        return this.state.allItems
-    }
+   
 
     constructor(private context: WebPartContext) {
         sp.setup({
@@ -74,7 +41,7 @@ export class SPService {
         var finalArray:any[];
         let myGroups = await (await this.context.spHttpClient.get(`${this.context.pageContext.web.absoluteUrl}/_api/Web/CurrentUser/Groups`,
             SPHttpClient.configurations.v1)).json();
-       console.log(myGroups);
+    //    console.log(myGroups);
         
         return myGroups
             
@@ -84,10 +51,20 @@ export class SPService {
     }
 
     public async getAllDocs() {
+        var siteUrl = this.context.pageContext.web.absoluteUrl ///Get Site Url
+        // console.log(siteUrl)
+    
+        const mySiteArr = siteUrl.split("/");
+        let siteName = mySiteArr[mySiteArr.length - 1].split(".")[0]; ///Get Site Name
+        // console.log(siteName)
+    
+
+
         var items: any[];
         const myArray = this.state.currPageUrl.split("/");
         let rackName = myArray[myArray.length - 1].split(".")[0];
         this.rackName = myArray[myArray.length - 1].split(".")[0];
+        // this.rackName = "Rack1649273338733"
 
         
                    
@@ -119,13 +96,13 @@ export class SPService {
 
 
         try {
-            let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/${this.rackName}')/files?$expand=ListItemAllFields`
+            // let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/${this.rackName}')/files?$expand=ListItemAllFields`
 
-            // let requestUrl = `https://devbeam.sharepoint.com/sites/ModernConnect/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/Rack1646754094655')/files?$expand=ListItemAllFields`
+            let requestUrl = `${siteUrl}/_api/web/getfolderbyserverrelativeurl('Rackhouse%20Documents/${this.rackName}')/files?$expand=ListItemAllFields`
 
             let myItems = await (await this.context.spHttpClient.get(requestUrl, SPHttpClient.configurations.v1)).json();
-            console.log(myItems.value);
-            console.log(requestUrl);
+            // console.log(myItems.value);
+            // console.log(requestUrl);
             //  console.log(this.rackName);
 
             //Current page URL 

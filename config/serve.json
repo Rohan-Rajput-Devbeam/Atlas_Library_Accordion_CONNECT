@@ -2,5 +2,5 @@
   "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/workbench.aspx"
+  "initialPage": "https://bgsw1.sharepoint.com/sites/CONNECTII/_layouts/workbench.aspx"
 }

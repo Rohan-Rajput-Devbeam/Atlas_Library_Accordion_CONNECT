@@ -34,7 +34,7 @@ export default class AtlasLibraryConnectWebPart extends BaseClientSideWebPart<IA
 
   public render(): void {
     
-    console.log(this.properties.people);
+    // console.log(this.properties.people);
     const element: React.ReactElement<IAtlasLibraryConnectProps> = React.createElement(
       AtlasLibraryConnect,
       {
